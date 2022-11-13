@@ -80,8 +80,7 @@ public class AmsRepositoryImpl implements AmsRepository {
 	
 	public static Map<String, String> playStopMap = new HashMap<String, String>();
 	
-//	public static Multimap<String, Object> multiMap = ArrayListMultimap.create();
-	
+
 	public static Map<String, AmsRequest> hMap = new HashMap<String, AmsRequest>();
 	public static long playStartTimeStamp = System.currentTimeMillis(); 
 	public Set<String> set = null;
@@ -90,41 +89,7 @@ public class AmsRepositoryImpl implements AmsRepository {
 	public void saveAmsRequest(AmsRequest amsRequest) {
 		
 
-		
-			
-
-			//System.out.println(query1);
-//			mongoOperations.remove(query1, AmsRequest.class);
-//		} else if(amsRequest.getAction().equalsIgnoreCase("PLAYSTART")){
-			/*delete the playStart trap if it received and playstop trap by comparing 
-			 the 1.seqNo 2.ipAddress 3.stb*/		
-			
-//			Query query1 = new Query();
-//			query1.addCriteria(Criteria.where("action").is("PLAYSTART").
-//					andOperator(Criteria.where("stb").is(amsRequest.getStb())
-					/*,Criteria.where("ipAddress").is(amsRequest.getIpAddress())
-					,Criteria.where("seqNo").is(amsRequest.getSeqNo())
-					,Criteria.where("subject").is(amsRequest.getSubject())*/
-//							));
-			//System.out.println(query1);
-//			mongoOperations.remove(query1, AmsRequest.class);
-//		}else if(amsRequest.getAction().equalsIgnoreCase("ALIVE")){
-//			/*delete all old ALIVE traps for current STB and insert new ALIVE trap for current STB*/			
-//			Query query1 = new Query();
-//			query1.addCriteria(Criteria.where("action").is("ALIVE").
-//					andOperator(Criteria.where("stb").is(amsRequest.getStb())
-//							));			
-//			mongoOperations.remove(query1, AmsRequest.class);
-//		}
-//		else if(amsRequest.getAction().equalsIgnoreCase("BOOTUP")){
-//			/*delete all old BOOTUP traps for current STB and insert new BOOTUP trap for current STB*/			
-//			Query query1 = new Query();
-//			query1.addCriteria(Criteria.where("action").is("BOOTUP").
-//					andOperator(Criteria.where("stb").is(amsRequest.getStb())
-//							));			
-//			mongoOperations.remove(query1, AmsRequest.class);
-//		}
-		long startTime=System.currentTimeMillis();
+long startTime=System.currentTimeMillis();
 		
 		Query query1 = new Query();
 		
@@ -143,29 +108,23 @@ public class AmsRepositoryImpl implements AmsRepository {
 				if(abc < 50000 || abc > 86400000) {
 					playStopMap.put(amsRequest.getStb(), sdf.format(amsRequest.getCreatedDate())+amsRequest.getSubject());
 					AmsServerLog.error(new StringBuilder("Skipped Trap ").append(amsRequest.toString()).toString(),null);
-					//System.out.println(new StringBuilder("Skipped Trap ").append(amsRequest.toString()).toString());
 					return;
 				}
 				else{
 					if(!playStopMap.containsKey(amsRequest.getStb())){
 						playStopMap.put(amsRequest.getStb(), sdf.format(amsRequest.getCreatedDate()));
-						//System.out.println("put:"+amsRequest.getStb()+":"+playStopMap.get(amsRequest.getStb()));
 					}
 						//if same stb sent playstop traps with same subject id continuously in same hour then discards such PLAYSTOP Traps. else 
 						if(playStopMap.get(amsRequest.getStb()).equalsIgnoreCase(sdf.format(amsRequest.getCreatedDate())+amsRequest.getSubject())){
 							AmsServerLog.error(new StringBuilder("Skipped Junk PlayStop Trap ").append(amsRequest.toString()).toString(),null);
-							//System.out.println(":"+sdf.format(amsRequest.getCreatedDate())+amsRequest.getSubject()+"Skipped Junk PlayStop Trap "+amsRequest.toString());
 							return;
 						} else{
 							
 							//below statement should be last statement in else block
 							playStopMap.put(amsRequest.getStb(), sdf.format(amsRequest.getCreatedDate())+amsRequest.getSubject());
-							//System.out.println("processing:"+amsRequest.getStb()+":"+playStopMap.get(amsRequest.getStb())+":"+amsRequest.toString());
 						}
 				}
 			}
-//			sdf.format(amsRequest.getCreatedDate());
-//			playStopMap.put(amsRequest.getStb(), sdf.format(amsRequest.getCreatedDate())+amsRequest.getSubject());
 			
 			
 			//COMMENTING THE CODE TO REDUCE BURDEN ON SERVER WHILE SAVING PLAYSTOP//
@@ -179,7 +138,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 					,Criteria.where("seqNo").is(amsRequest.getSeqNo())
 					,Criteria.where("subject").is(amsRequest.getSubject())
 							));
-			//System.out.println(query1);
 			mongoOperations.remove(query1, AmsRequest.class);*/
 			
 			break;
@@ -217,7 +175,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 							,Criteria.where("seqNo").is(amsRequest.getSeqNo())
 							,Criteria.where("subject").is(amsRequest.getSubject())*/
 									));
-					//System.out.println(query1);
 					mongoOperations.remove(query1, "amsDynamicData");
 					ar.setAliveUpdatedTime(System.currentTimeMillis());
 					saveAmsRequestDetails(ar, mongoOperations, startTime);	
@@ -242,10 +199,8 @@ public class AmsRepositoryImpl implements AmsRepository {
 			query1 = new Query();
 			query1.addCriteria(Criteria.where("action").is("PLAYSTART").
 					andOperator(Criteria.where("stb").is(amsRequest.getStb())));
-			//System.out.println(query1);
 			mongoOperations.remove(query1, "amsDynamicData");
 			amsRequest.setAliveUpdatedTime(System.currentTimeMillis());
-			//saveAmsRequestDetails(amsRequest, mongoOperations, startTime);	
 			break;
 		case "ALIVE":
 			if(RequestProcessor.IGNORE_ALIVE_PLAYSTART || (System.currentTimeMillis()-amsRequest.getCreatedDate())/AmsConstants.MINUTE>=30){
@@ -306,7 +261,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 			Query query=new Query();				
 			query.addCriteria(Criteria.where("action").is("PLAYSTART").andOperator(Criteria.where("stb").is(amsRequest.getStb())));				
 			AmsDynamicData ams=mongoOperations.findOne(query, AmsDynamicData.class);
-			//System.out.println("PLAYSTART-->"+ams.getStb());
 			if(ams!=null){			
 				ams.setAction("PLAYSTOP");			
 				ams.setEndDateTime(System.currentTimeMillis());
@@ -663,10 +617,8 @@ public class AmsRepositoryImpl implements AmsRepository {
 			AggregationResults<AmsRequestVO> groupResults = mongoTemplate.aggregate(aggregation, AmsRequest.class,
 					AmsRequestVO.class);
 			List<AmsRequestVO> results = groupResults.getMappedResults();
-			//System.out.println(aggregation);
 			return results;
 		} catch (Exception e) {
-			//e.printStackTrace();
 			AmsError.error("Error in Method: getAmsDetailsBySubjectTypeandIdentifier"+e.getMessage(), e);
 			return null;
 		}
@@ -810,7 +762,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 						,criteria.where("stb").regex(identifier, "i").
 						andOperator(criteria.where("subDeviceType").regex(deviceType, "i")),
 						criteria.where("endDateTime").gte(noOfSecondsToConsider));
-				//criteria1 = criteria1.where("endDateTime").gte(noOfSecondsToConsider);
 			}
 			if (status.equalsIgnoreCase("offline")) {
 				criteria = criteria.where("action").is(actionType).andOperator(
@@ -818,7 +769,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 						  ,criteria.where("stb")
 						.regex(identifier, "i").andOperator(criteria.where("subDeviceType").regex(deviceType, "i")),
 						criteria.where("endDateTime").lte(noOfSecondsToConsider));
-				//criteria1 = criteria1.where("endDateTime").lte(noOfSecondsToConsider);
 			}
 		}
 
@@ -830,7 +780,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 						.as("subject").last("startDateTime").as("startDateTime").last("endDateTime").as("endDateTime").
 						last("createdDate").as("createdDate"),*/
 						sort,skip(offset),limit(max)).withOptions(Aggregation.newAggregationOptions().allowDiskUse(true).build());
-		//System.out.println(aggregation);
 		AggregationResults<AmsRequestVO> groupResults = mongoTemplate.aggregate(aggregation, "amsDynamicData",
 				AmsRequestVO.class);
 		
@@ -850,14 +799,12 @@ public class AmsRepositoryImpl implements AmsRepository {
 						criteria.where("stb")
 						.regex(identifier, "i").andOperator(criteria.where("subDeviceType").regex(deviceType, "i")),
 						criteria.where("endDateTime").gte(noOfSecondsToConsider));
-				//criteria1 = criteria1.where("endDateTime").gte(noOfSecondsToConsider);
 			}
 			if (status.equalsIgnoreCase("offline")) {
 				criteria = criteria.where("action").is(actionType).andOperator(criteria.where("franchiseId").in(franchiseIdsLst),
 						criteria.where("stb")
 						.regex(identifier, "i").andOperator(criteria.where("subDeviceType").regex(deviceType, "i")),
 						criteria.where("endDateTime").lte(noOfSecondsToConsider));
-				//criteria1 = criteria1.where("endDateTime").lte(noOfSecondsToConsider);
 			}
 		}
 
@@ -875,7 +822,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 		totalcount=results.size();
 		}
 		*/
-		//System.out.println(aggregation);
 		return totalcount;
 	}
 
@@ -950,7 +896,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 		AmsDynamicData ams = mongoOperations.findOne(query, AmsDynamicData.class);
 		if(ams!=null){
 			Long duration=0l;
-			//calculating duration based on currentTime-startDateTime
 			Date strDate=new Date();
         	Date endDate=new Date();
         	if(ams.getStartDateTime()!=null){
@@ -973,7 +918,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 				mongoOperations.remove(ams, "amsDynamicData");
 			}
 		}
-		//modify and update with save()		
 	}
 
 	@Override
@@ -1036,7 +980,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 		AggregationResults<AmsRequestVO> groupResults = mongoTemplate.aggregate(aggregation, "amsDynamicData",
 				AmsRequestVO.class);
 		List<AmsRequestVO> results = groupResults.getMappedResults();
-		//System.out.println(aggregation);
 		
 		return results;
 	}
@@ -1057,8 +1000,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 		AggregationResults<AmsRequestVO> groupResults = mongoTemplate.aggregate(aggregation, "amsDynamicData",
 				AmsRequestVO.class);
 		List<AmsRequestVO> results = groupResults.getMappedResults();
-		//System.out.println(aggregation);
-		
 		return results;
 	}
 
@@ -1103,7 +1044,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 			cal2.set(Calendar.HOUR_OF_DAY,23);
 			cal2.set(Calendar.MINUTE,59);
 			cal2.set(Calendar.SECOND,59);				
-			//System.out.println("from-->" + cal1.getTime() + "to-->" + cal2.getTime());
 		}	
 		//for apsfl endDateTime - startDateTime for 178 durationInSec
 		Criteria criteria = new Criteria();
@@ -1117,7 +1057,7 @@ public class AmsRepositoryImpl implements AmsRepository {
 		AggregationResults<AmsRequestVO> groupResults = mongoTemplate.aggregate(aggregation, AmsRequest.class,
 				AmsRequestVO.class);
 		List<AmsRequestVO> results = groupResults.getMappedResults();
-		//System.out.println(results);
+		
 		return results;
 		}
 		catch (Exception e) {
@@ -1333,7 +1273,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 		
 		AggregationResults<ReportCollection> groupResults = mongoTemplate.aggregate(aggregation, ReportCollection.class,
 				ReportCollection.class);
-		//System.out.println(aggregation);
 		List<ReportCollection> results = groupResults.getMappedResults();		
 		return results;				
 	}
@@ -1468,7 +1407,6 @@ public class AmsRepositoryImpl implements AmsRepository {
 		AggregationResults<AmsRequestVO> groupResults = mongoTemplate.aggregate(aggregation, "amsDynamicData",
 				AmsRequestVO.class);
 		List<AmsRequestVO> results = groupResults.getMappedResults();
-		//System.out.println(aggregation);
 		return results;
 	}
 
