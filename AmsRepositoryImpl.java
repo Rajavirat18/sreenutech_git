@@ -88,11 +88,9 @@ public class AmsRepositoryImpl implements AmsRepository {
 	
 	@Override
 	public void saveAmsRequest(AmsRequest amsRequest) {
-		// check app version before saving into the collection
-		//System.out.println("amsRequest"+amsRequest.getAction());
-//		if(amsRequest.getAction().equalsIgnoreCase("PLAYSTOP")){
-			/*delete the playStart trap if it received and playstop trap by comparing 
-			 the 1.seqNo 2.ipAddress 3.stb*/		
+		
+
+		
 			
 //			Query query1 = new Query();
 //			query1.addCriteria(Criteria.where("action").is("PLAYSTART").
