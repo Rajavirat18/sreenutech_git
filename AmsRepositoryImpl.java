@@ -92,13 +92,7 @@ public class AmsRepositoryImpl implements AmsRepository {
 
 		
 			
-//			Query query1 = new Query();
-//			query1.addCriteria(Criteria.where("action").is("PLAYSTART").
-//					andOperator(Criteria.where("stb").is(amsRequest.getStb())
-//					,Criteria.where("ipAddress").is(amsRequest.getIpAddress())
-//					,Criteria.where("seqNo").is(amsRequest.getSeqNo())
-//					,Criteria.where("subject").is(amsRequest.getSubject())
-//							));
+
 			//System.out.println(query1);
 //			mongoOperations.remove(query1, AmsRequest.class);
 //		} else if(amsRequest.getAction().equalsIgnoreCase("PLAYSTART")){
