@@ -1,20 +1,24 @@
 package com.keybank.offers.service;
 
-import com.keybank.offers.builder.OffersDetailsRequestBuilder;
-import com.keybank.offers.builder.OffersDetailsResponseBuilder;
-import com.keybank.offers.dao.IOfferDetailsDao;
-import com.keybank.offers.exception.BussinessException;
-import com.keybank.offers.exception.SystemException;
-import com.keybank.offers.model.*;
-import com.keybank.offers.serviceclient.ICardDetailsServiceClient;
-import com.keybank.offers.util.OffersDetailsUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import com.keybank.offers.builder.OffersDetailsRequestBuilder;
+import com.keybank.offers.builder.OffersDetailsResponseBuilder;
+import com.keybank.offers.controller.OfferDetailsController;
+import com.keybank.offers.dao.IOfferDetailsDao;
+import com.keybank.offers.exception.BussinessException;
+import com.keybank.offers.exception.SystemException;
+import com.keybank.offers.model.CardDetailsRequest;
+import com.keybank.offers.model.CardDetailsResponse;
+import com.keybank.offers.model.OffersDaoRequest;
+import com.keybank.offers.model.OffersDaoResponse;
+import com.keybank.offers.model.OffersRequest;
+import com.keybank.offers.model.OffersResponse;
+import com.keybank.offers.serviceclient.ICardDetailsServiceClient;
+import com.keybank.offers.util.OffersDetailsUtil;
 
 @Service
 public class OffersDetailsServiceImpl implements IOffersDetailsService {
@@ -30,9 +34,14 @@ public class OffersDetailsServiceImpl implements IOffersDetailsService {
 
     @Autowired
     private OffersDetailsResponseBuilder offersDetailsResponseBuilder;
+    
+	Logger logger=LogManager.getLogger(OfferDetailsController.class);
+
 
     public OffersResponse getOffers(OffersRequest offersRequest) throws SystemException, BussinessException {
 
+    	logger.info("OffersDetailsServiceImpl: getOffers()"+offersRequest);
+    	
         OffersResponse offersResponse = null;
 
         CardDetailsRequest cardDetailsRequest = offersDetailsRequestBuilder.buildCardDetailsReqest(offersRequest);
