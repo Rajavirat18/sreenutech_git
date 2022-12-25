@@ -25,48 +25,42 @@ import java.time.format.DateTimeFormatter;
 @Tag(name = "offers details controller")
 public class OfferDetailsController {
 
-    @Autowired
-    private OffersDetailsValidator offersDetailsValidator;
-    @Autowired
-    private IOffersDetailsService offersDetailsService;
+	@Autowired
+	private OffersDetailsValidator offersDetailsValidator;
+	@Autowired
+	private IOffersDetailsService offersDetailsService;
 
-    @Operation(summary = "get offer detaisl")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",description = "OK",content = {
-                    @Content(mediaType = "applicatio/json",schema = @Schema(implementation = OffersResponse.class))
-            }),
+	@Operation(summary = "get offer detaisl")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "OK", content = {
+					@Content(mediaType = "applicatio/json", schema = @Schema(implementation = OffersResponse.class)) }),
 
-            @ApiResponse(responseCode = "400",description = "Bad Request"),
-            @ApiResponse(responseCode = "500",description = "Internal Server Error"),
-            @ApiResponse(responseCode = "404",description = "Not Found")
-    })
-    @GetMapping("/offers/{cardNum}/{cvv}/{nameOnCard}/{expDate}")
-    public OffersResponse getOffers(@RequestHeader("client_id") String clientId,
-                                    @PathVariable("cardNum") String cardNum,
-                                    @PathVariable("cvv") String cvv,
-                                    @PathVariable("nameOnCard") String nameOnCard,
-                                    @PathVariable("expDate") String expDate,
-                                    @RequestHeader("channel_id") String channelId,
-                                    @RequestHeader("request_id") String reuqestId,
-                                    @RequestHeader("message_ts") String messageTimeStamp
-    ) throws OffersRequestInvalidException, SystemException, BussinessException {
-        OffersRequest offersRequest = new OffersRequest();
+			@ApiResponse(responseCode = "400", description = "Bad Request"),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
+			@ApiResponse(responseCode = "404", description = "Not Found") })
+	@GetMapping("/offers/{cardNum}/{cvv}/{nameOnCard}/{expDate}")
+	public OffersResponse getOffers(@RequestHeader("client_id") String clientId,
+			@PathVariable("cardNum") String cardNum, @PathVariable("cvv") String cvv,
+			@PathVariable("nameOnCard") String nameOnCard, @PathVariable("expDate") String expDate,
+			@RequestHeader("channel_id") String channelId, @RequestHeader("request_id") String reuqestId,
+			@RequestHeader("message_ts") String messageTimeStamp)
+			throws OffersRequestInvalidException, SystemException, BussinessException {
+		OffersRequest offersRequest = new OffersRequest();
 
-        offersRequest.setCvv(cvv);
-        offersRequest.setCardNum(cardNum);
-        offersRequest.setExpDate(expDate);
-        offersRequest.setNameOnCard(nameOnCard);
-        offersRequest.setRequestId(reuqestId);
-        offersRequest.setChannelId(channelId);
-        offersRequest.setClientId(clientId);
-        offersRequest.setMessageTimestamp(messageTimeStamp);
+		offersRequest.setCvv(cvv);
+		offersRequest.setCardNum(cardNum);
+		offersRequest.setExpDate(expDate);
+		offersRequest.setNameOnCard(nameOnCard);
+		offersRequest.setRequestId(reuqestId);
+		offersRequest.setChannelId(channelId);
+		offersRequest.setClientId(clientId);
+		offersRequest.setMessageTimestamp(messageTimeStamp);
 
-        System.out.println("controller offerrequest :   " +offersRequest);
-        offersDetailsValidator.validateRequest(offersRequest);
+		System.out.println("controller offerrequest :   " + offersRequest);
+		offersDetailsValidator.validateRequest(offersRequest);
 
+		OffersResponse offersResponse = offersDetailsService.getOffers(offersRequest);
+		return offersResponse;
 
-        OffersResponse offersResponse = offersDetailsService.getOffers(offersRequest);
-        return offersResponse;
-
-    }
+	}
 }

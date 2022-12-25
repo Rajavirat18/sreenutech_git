@@ -49,9 +49,7 @@ public class OffersDetailsServiceImpl implements IOffersDetailsService {
             OffersDaoResponse offersDaoResponse = offerDetailsDao.getOffers(offersDaoRequest);
 
             offersResponse = offersDetailsResponseBuilder.buildResponsePath(offersDaoResponse);
-        } else {
-
-        }
+        } 
         return offersResponse;
     }
 }
