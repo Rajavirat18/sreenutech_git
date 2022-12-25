@@ -1,5 +1,17 @@
 package com.keybank.offers.dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
+
 import com.keybank.offers.exception.BussinessException;
 import com.keybank.offers.exception.SystemException;
 import com.keybank.offers.model.OffersDao;
@@ -7,17 +19,17 @@ import com.keybank.offers.model.OffersDaoRequest;
 import com.keybank.offers.model.OffersDaoResponse;
 import com.keybank.offers.util.OffersDetailsConstant;
 import com.keybank.offers.util.OffersDetailsErrorCodesEnum;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @Repository
 public class OfferDetailsDaoImpl implements IOfferDetailsDao {
+	
+	private static final Logger logger = LogManager.getLogger(OfferDetailsDaoImpl.class);
+
+
+
 	public OffersDaoResponse getOffers(OffersDaoRequest offerDaoRequest) throws BussinessException, SystemException {
+		
+		logger.info("OfferDetailsDaoImpl: getOffers()"+offerDaoRequest);
 		OffersDaoResponse offersDaoResponse = null;
 		ArrayList<OffersDao> offersDaoArrayList = new ArrayList<OffersDao>();
 		try {
@@ -47,8 +59,9 @@ public class OfferDetailsDaoImpl implements IOfferDetailsDao {
 			String dbResponseCode = cstmt.getString(7);
 			String dbResponseMessage = cstmt.getString(8);
 
-			System.out.println("dbrespCode is :" + dbResponseCode + ":::" + "dbrespMsg:" + dbResponseMessage);
 
+			logger.debug("dbrespCode is :" + dbResponseCode + ":::" + "dbrespMsg:" + dbResponseMessage);
+			
 			if (OffersDetailsConstant.SUCCESS_RESP_CODE.equals(dbResponseCode)) {
 
 				offersDaoResponse = new OffersDaoResponse();
@@ -74,6 +87,7 @@ public class OfferDetailsDaoImpl implements IOfferDetailsDao {
 				offersDaoResponse.setOffersDao(offersDaoArrayList);
 
 			} else if (OffersDetailsErrorCodesEnum.checkErrorCode(dbResponseCode, "Data Error")) {
+				logger.error("data error occured");
 				throw new BussinessException(dbResponseCode, dbResponseMessage);
 			} else if (OffersDetailsErrorCodesEnum.checkErrorCode(dbResponseCode, "System Error")) {
 				throw new SystemException(dbResponseCode, dbResponseMessage);
@@ -82,12 +96,15 @@ public class OfferDetailsDaoImpl implements IOfferDetailsDao {
 						OffersDetailsConstant.GENERIC_RESP_MSG);
 			}
 		} catch (BussinessException bussinessException) {
+			logger.error("Exception Occured whie executing the stored procedure");
 			bussinessException.printStackTrace();
 			throw bussinessException;
 		} catch (SystemException systemException) {
+			logger.error("Exception Occured whie executing the stored procedure");
 			systemException.printStackTrace();
 			throw systemException;
 		} catch (SQLException e) {
+			logger.error("Exception Occured whie executing the stored procedure");
 			e.getMessage();
 		}
 
