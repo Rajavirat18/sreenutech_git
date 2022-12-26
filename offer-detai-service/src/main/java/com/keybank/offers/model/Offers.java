@@ -1,8 +1,10 @@
 package com.keybank.offers.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class Offers {
     private String offerId;
     private String name;
