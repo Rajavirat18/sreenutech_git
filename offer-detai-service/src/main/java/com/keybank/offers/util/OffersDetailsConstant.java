@@ -6,9 +6,9 @@ public class OffersDetailsConstant {
 
     public static final String OFFER_ID = "oid";
     public static final String OFFER_NAME = "name";
-    public static final String OFFER_DESC = "description";
-    public static final String OFFER_EXPIRY_DATE = "expiry_date";
-    public static final String OFFER_IMAGE_URL = "image_url ";
+    public static final String OFFER_DESC = "desc";
+    public static final String OFFER_EXPIRY_DATE = "exp_date";
+    public static final String OFFER_IMAGE_URL = "image_url";
     public static final String OFFER_CREATION_DATE = "create_date";
     public static final String OFFER_STOCK = "stock";
     public static final String OFFER_TYPE = "offer_type";
@@ -30,6 +30,8 @@ public class OffersDetailsConstant {
     public static final String EXP_DATE = "EXP_DATE_IN";
     public static final String RESP_CODE_OUT = "RESP_CODE_OUT";
     public static final String RESP_MSG_OUT = "RESP_MSG_OUT";
+	public static final String STORED_PROCEDURE_NAME = "GET_OFFER_DETAILS_V1";
+	public static final String OFFERS_RESULT_SET_NAME = "offersResult";
 
 
 }

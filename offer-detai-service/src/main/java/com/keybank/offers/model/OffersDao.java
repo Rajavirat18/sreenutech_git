@@ -1,17 +1,15 @@
 package com.keybank.offers.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter
+@Getter
 public class OffersDao {
 
     private String offerId;
     private String name;
-    private String description;
+    private String desc;
     private String expDate;
     private String imageUrl;
     private String creationDate;

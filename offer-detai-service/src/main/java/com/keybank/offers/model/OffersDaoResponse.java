@@ -1,9 +1,12 @@
 package com.keybank.offers.model;
 
-import lombok.Data;
-
 import java.util.List;
-@Data
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class OffersDaoResponse {
 
     private String responeCode;
