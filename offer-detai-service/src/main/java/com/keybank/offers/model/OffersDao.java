@@ -9,7 +9,7 @@ public class OffersDao {
 
     private String offerId;
     private String name;
-    private String description;
+    private String desc;
     private String expDate;
     private String imageUrl;
     private String creationDate;

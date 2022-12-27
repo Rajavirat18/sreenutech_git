@@ -24,7 +24,7 @@ public class OffersDetailsResponseBuilder {
 			offers.setOffersType(offersDao.getOffersType());
 			offers.setOfferId(offersDao.getOfferId());
 			offers.setExpDate(offersDao.getExpDate());
-			offers.setDescription(offersDao.getDescription());
+			offers.setDescription(offersDao.getDesc());
 			offersList.add(offers);
 
 		}

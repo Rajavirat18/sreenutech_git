@@ -76,7 +76,7 @@ public class OfferDetailsDaoImpl implements IOfferDetailsDao {
 					offersDao.setOffersType(rs.getString(2));
 					offersDao.setImageUrl(rs.getString(3));
 					offersDao.setCreationDate(rs.getString(4));
-					offersDao.setDescription(rs.getString(5));
+					offersDao.setDesc(rs.getString(5));
 					offersDao.setExpDate(rs.getString(6));
 					offersDao.setName(rs.getString(7));
 					offersDao.setStock(rs.getString(8));
